@@ -1,4 +1,4 @@
-# IA-Tarefa6-Algoritmo-Genetico
+# Tarefa 6 de IA - Algoritmo Genético
 
 Esse repositório consiste da Tarefa 6 da disciplina de Inteligência Artificial 2021.2, cujo objetivo é a implementação de um algoritmo genético para a resolução do problema das 4 rainhas.
 
