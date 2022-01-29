@@ -1,0 +1,7 @@
+plotly
+pandas
+numpy
+streamlit
+bisect
+random
+math

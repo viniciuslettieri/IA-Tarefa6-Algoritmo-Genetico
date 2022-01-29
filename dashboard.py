@@ -1,5 +1,4 @@
 import streamlit as st
-import asyncio
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -32,13 +31,12 @@ def dashboard():
         imprimeAvaliacao(st)
 
         
-
 def sidebar(sidebar):
     sidebar.markdown("# Parâmetros do Algoritmo")
 
     globalState["quantTentativas"] = sidebar.slider("Quantidade de tentativas", 1, 20, 1)
     globalState["tamPop"] = sidebar.slider("Tamanho da População", 10, 100, 10, step=2)
-    globalState["numGer"] = sidebar.slider("Número de Gerações", 5, 1000, 100)
+    globalState["numGer"] = sidebar.slider("Número de Gerações", 5, 3000, 100)
     globalState["probCross"] = sidebar.slider("Probabilidade de Crossover", 70.0, 100.0, 80.0, step=1.0) / 100
     globalState["probMut"] = sidebar.slider("Probabilidade de Mutação por Gene", 0.0, 5.0, 2.0, step=0.5) / 100
     globalState["elitismo"] = sidebar.checkbox("Elitismo")
