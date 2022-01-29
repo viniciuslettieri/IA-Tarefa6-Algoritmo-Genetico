@@ -36,20 +36,12 @@ class AlgoritmoGenetico:
 
         return proporcao, funcaoAdaptacao
 
-    def intermediaria(self, P, N, elitismo=False):
+    def intermediaria(self, P, N):
         proporcoes = self.roletaViciada(P, N)
         proporcoesAcumulada = np.cumsum(proporcoes)
         matingPool = []
 
-        if elitismo:
-            Q = len(P) - 1
-            maxprop = max(proporcoes)
-            idxmax = proporcoes.index(maxprop)
-            matingPool.append( P[idxmax] )
-        else:
-            Q = len(P)
-
-        for i in range(0, Q):
+        for i in range(0, len(P)):
             aleatorio = random.uniform(0, 1)
             idx = bisect.bisect_left(proporcoesAcumulada, aleatorio)
             matingPool.append( P[idx] )
@@ -89,13 +81,22 @@ class AlgoritmoGenetico:
         mediaAdaptacaoGeracoes = []
 
         for i in range(0, self.numGer):
+            # Roleta Viciada
             probs, funcaoAdaptacao = self.roletaViciada(populacao, self.tamTabuleiro)
 
+            # Pegando o melhor individuo pro elitismo
+            maxprop = max(probs)
+            idxmax = probs.index(maxprop)
+            individuomax = populacao[idxmax]
+
+            # Adicionando no histórico
             adaptacaoGeracoes.append(max(funcaoAdaptacao))
             mediaAdaptacaoGeracoes.append(sum(funcaoAdaptacao) / len(funcaoAdaptacao))
 
-            populacao = self.intermediaria(populacao, self.tamTabuleiro, self.elitismo)
+            # Gerando Mating Pool
+            populacao = self.intermediaria(populacao, self.tamTabuleiro)
 
+            # Crossover
             popSet = populacao.copy()
             novaPopulacao = []
             while len(popSet) > 0:
@@ -107,9 +108,16 @@ class AlgoritmoGenetico:
                 novaPopulacao.append(novoB)
                 populacao = novaPopulacao
 
+            # Mutação
             for idx, individuo in enumerate(populacao):
                 populacao[idx] = self.mutacao(individuo, self.probMut)
 
+            # Elitismo
+            if self.elitismo:
+                eliminado = random.choice(range(0, len(populacao)))
+                populacao[eliminado] = individuomax
+
+        # Adicionando último ao histórico
         probs, funcaoAdaptacao = self.roletaViciada(populacao, self.tamTabuleiro)
         adaptacaoGeracoes.append(max(funcaoAdaptacao))
         mediaAdaptacaoGeracoes.append(sum(funcaoAdaptacao) / len(funcaoAdaptacao))
