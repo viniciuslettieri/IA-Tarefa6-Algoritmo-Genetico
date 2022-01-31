@@ -3,6 +3,7 @@ import numpy as np
 import bisect
 import random
 import math
+import plotly.express as px
 
 from algogen.utils import stringToList, listToString
 from algogen.ImplementacaoBase import tabuleiro, numeroAtaques
@@ -74,7 +75,7 @@ class AlgoritmoGenetico:
 
         return novoA
 
-    def fit(self):
+    def fit(self, imprimirGraficos=False):
         populacao = self.inicializacao(self.tamPop, self.tamTabuleiro)
 
         adaptacaoGeracoes = []
@@ -124,6 +125,16 @@ class AlgoritmoGenetico:
 
         melhorIndividuo = populacao[ funcaoAdaptacao.index(max(funcaoAdaptacao)) ]
         melhorAdaptacao = max(funcaoAdaptacao)
+
+        # Caso queira imprimir os graficos
+        if imprimirGraficos:
+            print(f"Melhor Indivíduo da Última Geração [Adaptação {melhorAdaptacao}]: {stringToList(melhorIndividuo, tamTabuleiro)}")
+            fig = px.line(adaptacaoGeracoes, title="Melhor indivíduo a cada geração")
+            fig.update_layout(hovermode="x")
+            fig.show()
+            fig = px.line(mediaAdaptacaoGeracoes, title="Média indivíduos a cada geração")
+            fig.update_layout(hovermode="x")
+            fig.show()
         
         return [adaptacaoGeracoes, mediaAdaptacaoGeracoes, melhorIndividuo, melhorAdaptacao]
     
